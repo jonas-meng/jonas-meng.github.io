@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>JonasM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="JonasM">
+<meta property="og:url" content="https://jonasmeng.com/index.html">
+<meta property="og:site_name" content="JonasM">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="JonasM">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="JonasM" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">JonasM</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Simple but not easy</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://jonasmeng.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Python-Function-Annotation" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/06/05/Python-Function-Annotation/" class="article-date">
+  <time datetime="2021-06-04T22:55:37.000Z" itemprop="datePublished">2021-06-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/06/05/Python-Function-Annotation/">Python函数注释</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Python 函数注释是在<a href="https://www.python.org/dev/peps/pep-3107/" target="_blank" rel="noopener">PEP 3107</a>引入的，其主要目的是给函数形参和返回值添加可选元数据。</p>
+<p>两点重要的信息</p>
+<ol>
+<li>函数注释可选</li>
+<li>可添加任意 Python 表达式，但是 Python 本身并不会对表达式做处理，也不具有任何意思</li>
+</ol>
+<p>函数注释语法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">annotation</span><span class="params">(param1: <span class="string">"第一个函数注释"</span>, param2: <span class="string">"第二个函数注释"</span>)</span> -&gt; "返回值函数注释":</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">pass</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>annotation.__annotations__</span><br><span class="line">&#123;<span class="string">'param1'</span>: <span class="string">'第一个函数注释'</span>, <span class="string">'param2'</span>: <span class="string">'第二个函数注释'</span>, <span class="string">'return'</span>: <span class="string">'返回值函数注释'</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以通过函数对象的<code>__annotation__</code> 属性来获取所有的注释，其中有一个特别的 key 是 <code>return</code> 专门用来存放返回值函数注释。</p>
+<p>函数注释可以被用来实现很多功能：</p>
+<ul>
+<li>类型检测</li>
+<li>谓词逻辑</li>
+<li>IDE 类型辅助</li>
+</ul>
+<p>下面我们利用函数注释实现一个简单的谓词逻辑功能。</p>
+<p>我们先创建一个函数，并给两个参数添加_谓词注释_。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">repeat</span><span class="params">(times: <span class="string">'times &gt; 0 and times &lt; 10'</span>, name: <span class="string">'len(name) &gt; 5'</span>)</span> -&gt; str:</span></span><br><span class="line">    <span class="keyword">return</span> name * times</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>times 必须大于 0 并且小于 10</li>
+<li>name 长度必须大于 5</li>
+</ol>
+<p>我们可以直接运行该函数，但是 Python 不会解释注释，所以注释并没有效果。接下来我们来学习如何优雅的访问这些注释。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> inspect <span class="keyword">import</span> signature</span><br><span class="line"></span><br><span class="line">sig = signature(repeat)</span><br><span class="line"><span class="keyword">for</span> param_name <span class="keyword">in</span> sig.parameters:</span><br><span class="line">    print(<span class="string">f"<span class="subst">&#123;sig.parameters[param_name]&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># times: 'times &gt; 0 and times &lt; 10'</span></span><br><span class="line"><span class="comment"># name: 'len(name) &gt; 5'</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以利用<code>signature</code> 来访问函数参数，注意<code>signature.parameters</code> 是一个<strong>有序字典</strong>，按照参数列表的顺序访问参数。</p>
+<p>接下来我们要使用<a href="https://jonasmeng.com/2020/11/27/decorator-in-python/"><strong>装饰器</strong></a>语法来定义一个可以再运行时访问实参的 wrapper 函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parameter_predicate</span><span class="params">(f)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> arg <span class="keyword">in</span> args:</span><br><span class="line">            print(arg)</span><br><span class="line">        <span class="keyword">for</span> key, value <span class="keyword">in</span> kwargs:</span><br><span class="line">            print(key, value)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> f(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@parameter_predicate</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">repeat</span><span class="params">(times: <span class="string">'times &gt; 0 and times &lt; 10'</span>, name: <span class="string">'len(name) &gt; 5'</span>)</span> -&gt; str:</span></span><br><span class="line">    <span class="keyword">return</span> name * times</span><br><span class="line"></span><br><span class="line">repeat(<span class="number">1</span>, <span class="string">"abcde"</span>)</span><br><span class="line"><span class="comment"># 1</span></span><br><span class="line"><span class="comment"># abcde</span></span><br></pre></td></tr></table></figure>
+
+<p>现在唯一欠缺的就是如何执行注释中的 Python 表达式，我们使用<a href="https://docs.python.org/3/library/functions.html?highlight=eval#eval" target="_blank" rel="noopener"><code>eval</code>内置函数</a>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">globals = &#123;&#125;</span><br><span class="line">locals = &#123;<span class="string">"name"</span>: <span class="string">"Hello, World"</span>&#125;</span><br><span class="line">eval(<span class="string">"print(name)"</span>, globals, locals)</span><br></pre></td></tr></table></figure>
+
+<p><code>eval</code>函数可以执行任意的Python 片段，其中出现的变量会通过<code>globals</code> 和 <code>locals</code> 变量表查询，如果没有查询到则会报错。</p>
+<p>现在我们有了实现谓词解释器的所有工具。我们可以组合这些代码如下所示。</p>
+<p>由于 Python 中参数可以通过位置或者关键字的形式传入，所以<code>args</code> 和<code>kwargs</code>都需要处理，我们将实参值做为<code>locals</code>变量表传给<code>eval</code>，并且将失败的失败的谓词逻辑放入<code>failures</code>数组。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> inspect <span class="keyword">import</span> signature</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parameter_predicate</span><span class="params">(f)</span>:</span></span><br><span class="line">    sig = signature(f)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        params = [param <span class="keyword">for</span> param <span class="keyword">in</span> sig.parameters]</span><br><span class="line">        failures = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(args)):</span><br><span class="line">            param = sig.parameters[params[i]]</span><br><span class="line">            value = args[i]</span><br><span class="line">            locals = &#123;param.name: value&#125;</span><br><span class="line">            globals = &#123;&#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> eval(param.annotation, globals, locals):</span><br><span class="line">                failures.append(&#123;</span><br><span class="line">                    <span class="string">"name"</span>: param.name,</span><br><span class="line">                    <span class="string">"condition"</span>: param.annotation.format(param.name),</span><br><span class="line">                    <span class="string">"context"</span>: &#123;param.name: value&#125;</span><br><span class="line">                &#125;)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(args), len(args) + len(kwargs)):</span><br><span class="line">            param = sig.parameters[params[i]]</span><br><span class="line">            value = kwargs[param.name]</span><br><span class="line">            locals = &#123;param.name: value&#125;</span><br><span class="line">            globals = &#123;&#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> eval(param.annotation, globals, locals):</span><br><span class="line">                failures.append(&#123;</span><br><span class="line">                    <span class="string">"name"</span>: param.name,</span><br><span class="line">                    <span class="string">"condition"</span>: param.annotation.format(param.name),</span><br><span class="line">                    <span class="string">"context"</span>: &#123;param.name: value&#125;</span><br><span class="line">                &#125;)</span><br><span class="line">        <span class="keyword">if</span> len(failures) &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> RuntimeError(<span class="string">f"<span class="subst">&#123;failures&#125;</span>"</span>)</span><br><span class="line">        <span class="keyword">return</span> f(*args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@parameter_predicate</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">repeat</span><span class="params">(times: <span class="string">'times &gt; 0 and times &lt; 10'</span>, name: <span class="string">'len(name) &gt; 5'</span>)</span> -&gt; str:</span></span><br><span class="line">    <span class="keyword">return</span> name * times</span><br><span class="line"></span><br><span class="line">repeat(<span class="number">1</span>, <span class="string">"abcde"</span>)</span><br><span class="line"><span class="comment"># RuntimeError: [&#123;'name': 'name', 'condition': 'len(name) &gt; 5', 'context': &#123;'name': 'abcde'&#125;&#125;]</span></span><br><span class="line">print(repeat(<span class="number">0</span>, <span class="string">"abcdef"</span>))</span><br><span class="line"><span class="comment"># RuntimeError: [&#123;'name': 'times', 'condition': 'times &gt; 0 and times &lt; 10', 'context': &#123;'times': 0&#125;&#125;]</span></span><br></pre></td></tr></table></figure>
+<p>通过定义并处理函数注释，我们实现了一个简单的谓词解释器，帮助我们附加一些谓词条件到形参上。当然通过自定义一些语法，我们可以是谓词更加复杂具有更多功能。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://jonasmeng.com/2021/06/05/Python-Function-Annotation/" data-id="ckpixg2ql0000t5rp0o18b114" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E6%B3%A8%E9%87%8A/" rel="tag">函数注释</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/" rel="tag">装饰器</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-decorator-in-python" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/27/decorator-in-python/" class="article-date">
+  <time datetime="2020-11-27T07:04:02.000Z" itemprop="datePublished">2020-11-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/27/decorator-in-python/">Python 中的装饰器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Python-中的装饰器"><a href="#Python-中的装饰器" class="headerlink" title="Python 中的装饰器"></a>Python 中的装饰器</h1><p>首先，假设我们有一个函数<code>get_remote_resource</code>接受一个参数<code>res_id</code>并且返回要获取取的后台资源。<br>有一个函数<code>get_resource_x_png</code>，获取一个名为<code>x.png</code>的图片。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_remote_resource</span><span class="params">(res_id)</span>:</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_resource_x_png</span><span class="params">()</span>:</span></span><br><span class="line">    res_id = <span class="string">'x.png'</span></span><br><span class="line">    <span class="keyword">return</span> get_remote_resource(res_id)</span><br></pre></td></tr></table></figure>
+
+<p>这时，假设我们引入了缓存技术，那么自然在获取后台资源之前，我们需要检测当前资源是否在缓存中存在。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_remote_resource</span><span class="params">(res_id)</span>:</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exists_in_cache</span><span class="params">(res_id)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> res_id <span class="keyword">in</span> cache</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_resource_x_png</span><span class="params">()</span>:</span></span><br><span class="line">    res_id = <span class="string">'x.png'</span></span><br><span class="line">    <span class="keyword">if</span> exists_in_cache(res_id):</span><br><span class="line">        <span class="keyword">return</span> cache[res_id]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> get_remote_resource(res_id)</span><br></pre></td></tr></table></figure>
+
+<p>如上代码所示，我们直接在<code>get_resource_x_png</code>中加入缓存检测的逻辑。<br>这样的代码会导致获取资源的逻辑和检测缓存的逻辑之间出现紧耦合的现象。<br>那么也就无法在没有缓存的环境下重用<code>get_resource_x_png</code>，导致函数变得不灵活。<br>最好的我们能通过某种手段剥离缓存检测的逻辑。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_remote_resource</span><span class="params">(res_id)</span>:</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exists_in_cache</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">()</span>:</span></span><br><span class="line">        res_id = <span class="string">'x.png'</span></span><br><span class="line">        <span class="keyword">if</span> res_id <span class="keyword">in</span> cache:</span><br><span class="line">            <span class="keyword">return</span> cache[res_id]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> func()</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@exists_in_cache</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_resource_x_png</span><span class="params">()</span>:</span></span><br><span class="line">    res_id = <span class="string">'x.png'</span></span><br><span class="line">    <span class="keyword">return</span> get_remote_resource(res_id)</span><br></pre></td></tr></table></figure>
+
+<p>如上述代码所示，我们采用了一种<strong>装饰器</strong>的技巧。<br>其中<code>exists_in_resource</code>就是一个装饰器，它接受一个函数<code>func</code>作为参数，并且返回一个函数<code>wrapper</code>。<br><code>wrapper</code>会检查<code>x.png</code>在缓存中是否存在，如果存在则返回缓存中的结果，如果不存在这调用<code>func</code>并返回结果。</p>
+<p>其中<code>@exists_in_cache</code>是 Python 的一种语法糖，其效果类似于调用<code>exists_in_cache(get_resource_x_png)</code>并将返回的函数重新赋值给<code>get_resource_x_png</code>。<br>这样在使用时，可以直接使用同一个函数名字，不增加命名负担。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get_resource_x_png = exists_in_cache(get_resource_x_png)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果对于装饰器本身如何工作不理解的话，请查阅<a href="https://xumingmeng.com/2020/11/26/closure-in-python/" target="_blank" rel="noopener"> Python 中的闭包</a></p>
+</blockquote>
+<hr>
+<p>假设我们希望修改函数<code>get_resource_x_png</code>，通过传递资源 ID，获取对应的资源。<br>由于之前的装饰器在调用被装饰函数时并没有传递参数，所以会导致调用失败，造成异常。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_remote_resource</span><span class="params">(res_id)</span>:</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exists_in_cache</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        res_id = kwargs[<span class="string">'res_id'</span>] <span class="keyword">if</span> <span class="string">'res_id'</span> <span class="keyword">in</span> kwargs <span class="keyword">else</span> args[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> res_id <span class="keyword">in</span> cache:</span><br><span class="line">            <span class="keyword">return</span> cache[res_id]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@exists_in_cache</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_resource</span><span class="params">(res_id)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> get_remote_resource(res_id)</span><br></pre></td></tr></table></figure>
+
+<p>这时，我们就需要修改装饰器内部的<code>wrapper</code>函数， 添加<code>args</code>和<code>kwargs</code>接受任意参数，并且将接收到的参数传递给被装饰的函数<code>get_resource</code>。<br><code>res_id</code>可以通过判断外部的传参方式来获取，如果是关键字传参字，则直接获取；如果不是，则通过 args 元组获取参数。</p>
+<hr>
+<p>假设，我们又有一个新函数<code>get_resource_by_type</code>，改函数使用的缓存是另一个缓存<code>type_cache</code>。<br>那么我们该如何通过修改装饰器来使代码保持一致呢？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_remote_resource</span><span class="params">(res_id)</span>:</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exists_in_cache</span><span class="params">(cache)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">            res_id = kwargs[<span class="string">'res_id'</span>] <span class="keyword">if</span> <span class="string">'res_id'</span> <span class="keyword">in</span> kwargs <span class="keyword">else</span> args[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">if</span> res_id <span class="keyword">in</span> cache:</span><br><span class="line">               <span class="keyword">return</span> cache[res_id]</span><br><span class="line">           <span class="keyword">else</span>:</span><br><span class="line">               <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">       <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@exists_in_cache(cache)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_resource</span><span class="params">(res_id)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> get_remote_resource(res_id)</span><br><span class="line"></span><br><span class="line"><span class="meta">@exists_in_cache(type_cache)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_resource_by_type</span><span class="params">(res_type)</span>:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>我们用一个高级一点的<em>带参数装饰器</em>。<br>现在<code>exists_in_cache</code>是一个函数接受一个<code>cache</code>作为参数，并且返回一个<code>decorator</code>。<br>这个<code>decorator</code>的构成和上一个代码中的<code>exists_in_cache</code>函数一致。</p>
+<p>那么这里发生了一些什么呢？<br>其实带参数装饰器也是一种语法糖，等效于如下代码。<br>先调用<code>exists_in_cache(type_cache)</code>，生成一个新的装饰器（注意，此时内部的<code>cache</code>被绑定到了传递进来的<code>type_cache</code>），然后生成的装饰器再用<code>get_resource_by_type</code>作为参数生成最终的<code>get_resource_by_type</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get_resource_by_type = exists_in_cache(type_cache)(get_resource_by_type)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>通过装饰器等价的代码，我们可以理解到，由装饰器产生的函数<code>get_resource</code>包含的<em>元信息</em>（函数名<em>get_resource.<strong>name</strong></em>，函数文档<em>get_resource.<strong>doc</strong></em>）和我们定义的<code>get_resource</code>不一样了。<br>原因是实际上我们调用的不是<code>get_resource</code>而是在装饰器内部定义的<code>wrapper</code>函数，自然函数元信息会不一样。<br>考虑到有些情况下，会处理元信息，为了保留该元信息。<br>Python 为我们引入了<code>functools.wraps</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_remote_resource</span><span class="params">(res_id)</span>:</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exists_in_cache</span><span class="params">(cache)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line"><span class="meta">        @functools.wraps(func)</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">            res_id = kwargs[<span class="string">'res_id'</span>] <span class="keyword">if</span> <span class="string">'res_id'</span> <span class="keyword">in</span> kwargs <span class="keyword">else</span> args[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">if</span> res_id <span class="keyword">in</span> cache:</span><br><span class="line">               <span class="keyword">return</span> cache[res_id]</span><br><span class="line">           <span class="keyword">else</span>:</span><br><span class="line">               <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">       <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@exists_in_cache(cache)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_resource</span><span class="params">(res_id)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> get_remote_resource(res_id)</span><br><span class="line"></span><br><span class="line"><span class="meta">@exists_in_cache(type_cache)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_resource_by_type</span><span class="params">(res_type)</span>:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>如此一来即使是装饰后的函数也会包含一样的元信息。</p>
+<hr>
+<p>最后补充一点，装饰器是可以叠加任意层数的，类似如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@C</span></span><br><span class="line"><span class="meta">@B</span></span><br><span class="line"><span class="meta">@A</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">()</span>:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>由于装饰的顺序不同可能产生的效果也会不同，所以使用时需要认真考虑。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://jonasmeng.com/2020/11/27/decorator-in-python/" data-id="ckpix9pfl0003morp87wi6xuk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Decorator/" rel="tag">Decorator</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/" rel="tag">装饰器</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-closure-in-python" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/26/closure-in-python/" class="article-date">
+  <time datetime="2020-11-26T10:59:44.000Z" itemprop="datePublished">2020-11-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/26/closure-in-python/">Python 中的闭包</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Python-中的闭包"><a href="#Python-中的闭包" class="headerlink" title="Python 中的闭包"></a>Python 中的闭包</h1><h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>假设我们有一个<code>log</code>函数用于向终端输出一条信息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(msg)</span>:</span></span><br><span class="line">    print(msg)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task1</span><span class="params">()</span>:</span></span><br><span class="line">    log(<span class="string">'processing task'</span>)</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task2</span><span class="params">()</span>:</span></span><br><span class="line">    log(<span class="string">'processing task'</span>)</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">task1() <span class="comment"># processing task</span></span><br><span class="line">task2() <span class="comment"># processing task</span></span><br></pre></td></tr></table></figure>
+
+<p>两个函数<code>task1</code>,<code>tasks2</code>都调用了<code>log</code>函数输出了相同的<code>log</code>信息。<br>让我们很难定位到底哪一个是<code>task1</code>输出的，哪一个是<code>task2</code>输出的。<br>那怎么办？</p>
+<p>显然我们可以给<code>log</code>信息添加一个前缀信息，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[task1]: processing task</span><br><span class="line">[task2]: processing task</span><br></pre></td></tr></table></figure>
+
+<h1 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h1><h2 id="方案-1"><a href="#方案-1" class="headerlink" title="方案 1"></a>方案 1</h2><p>我们可以修改<code>log</code>函数签名，增加一个参数<code>prefix</code>。但是这么做的问题是，<code>log</code>函数的签名被修改了，那么<strong>所有引用该函数的地方</strong>都需要修改，对于大型工程项目会造成相当大的工作量。</p>
+<h2 id="方案-2"><a href="#方案-2" class="headerlink" title="方案 2"></a>方案 2</h2><p>使用闭包。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(msg)</span>:</span></span><br><span class="line">    print(msg)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log_generator</span><span class="params">(prefix)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(msg)</span>:</span></span><br><span class="line">        log(<span class="string">'[&#123;&#125;]: &#123;&#125;'</span>.format(prefix, msg))</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line">log1 = log_generator(prefix=<span class="string">'task1'</span>)</span><br><span class="line">log2 = log_generator(prefix=<span class="string">'task2'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task1</span><span class="params">()</span>:</span></span><br><span class="line">    log1(<span class="string">'processing task'</span>)</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task2</span><span class="params">()</span>:</span></span><br><span class="line">    log2(<span class="string">'processing task'</span>)</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">task1() <span class="comment"># [task1]: processing task</span></span><br><span class="line">task2() <span class="comment"># [task2]: processing task</span></span><br></pre></td></tr></table></figure>
+
+<p>如以上代码所示，我们通过<code>log_generator</code>可以生成拥有任意前缀的信息的<code>log</code>函数，而不改变<code>log</code>函数本身的签名。<br>这个技巧或者概念被称为<strong>闭包</strong>。</p>
+<h1 id="闭包概念"><a href="#闭包概念" class="headerlink" title="闭包概念"></a>闭包概念</h1><blockquote>
+<p>In programming languages, a closure, also lexical closure or function closure, is a technique for implementing lexically scoped name binding in a language with first-class functions. Operationally, a closure is a record storing a function together with an environment. The environment is a mapping associating each free variable of the function (variables that are used locally, but defined in an enclosing scope) with the value or reference to which the name was bound when the closure was created.</p>
+<p>在编程语言中，一个闭包，也被称为语法闭包或者函数闭包，是一种在支持头等函数的语言中实现静态范围命名绑定的技巧。闭包是一种结构体，存储一个函数以及相关的环境。该环境是一个映射关系，把函数里面<strong>自由变量</strong>（本地使用，但是在外部定义）与<em>闭包创建时</em>该<em>变量名</em>对应的值或者引用绑定在一起。</p>
+</blockquote>
+<p>简单来说，闭包就是一个函数和一个“字典”，该“字典”将闭包创建时函数所引用的_外部变量_变成键值对。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(msg)</span>:</span></span><br><span class="line">    print(msg)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log_generator</span><span class="params">(prefix)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(msg)</span>:</span></span><br><span class="line">        log(<span class="string">'[&#123;&#125;]: &#123;&#125;'</span>.format(prefix, msg))</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line">log1 = log_generator(prefix=<span class="string">'task1'</span>)</span><br><span class="line">log2 = log_generator(prefix=<span class="string">'task2'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>以<code>log_generator</code>函数为例，在创建<code>log1</code>时，我们创建了一个闭包，该闭包有一个函数<code>wrapper</code>和一个“字典”组成，该字典有一个键值对<code>prefix -&gt; task1</code>。同理在<code>log2</code>闭包的字典里，有一个键值对<code>prefix -&gt; task2</code>。</p>
+<h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><h2 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(msg)</span>:</span></span><br><span class="line">    print(msg)</span><br><span class="line"></span><br><span class="line">func = decorator(func)</span><br></pre></td></tr></table></figure>
+
+<p>如上述样例代码所示，我们可以利用<code>decorator</code>函数做任何事情，例如打印 log，记录信息，修改参数等等。可以再不修改原有函数的情况下，增加很多有用的信息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(msg)</span>:</span></span><br><span class="line">    print(msg)</span><br></pre></td></tr></table></figure>
+
+<p>Python 使用语法糖<code>@decorator</code>帮助减少最后一条赋值代码。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://jonasmeng.com/2020/11/26/closure-in-python/" data-id="ckpix9pfh0001morphgl6809p" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Closure/" rel="tag">Closure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AD%E5%8C%85/" rel="tag">闭包</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Closure/" rel="tag">Closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Decorator/" rel="tag">Decorator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E6%B3%A8%E9%87%8A/" rel="tag">函数注释</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/" rel="tag">装饰器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AD%E5%8C%85/" rel="tag">闭包</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/Decorator/" style="font-size: 10px;">Decorator</a> <a href="/tags/Python/" style="font-size: 20px;">Python</a> <a href="/tags/%E5%87%BD%E6%95%B0%E6%B3%A8%E9%87%8A/" style="font-size: 10px;">函数注释</a> <a href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/" style="font-size: 15px;">装饰器</a> <a href="/tags/%E9%97%AD%E5%8C%85/" style="font-size: 10px;">闭包</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/05/Python-Function-Annotation/">Python函数注释</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/27/decorator-in-python/">Python 中的装饰器</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/26/closure-in-python/">Python 中的闭包</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 JonasM<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
